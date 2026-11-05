@@ -1,81 +1,133 @@
-# E-Commerce Database Management System
+# 🛒 E-Commerce Management System (MySQL)
 
-## Project Overview
-The E-Commerce Database Management System is a MySQL-based project designed to manage online shopping operations. It stores customer details, product information, categories, orders, payments, and shipping records.
+## 📌 Project Overview
 
-## Technologies Used
-- MySQL
-- SQL
+The **E-Commerce Management System** is a MySQL-based database project designed to manage an online shopping platform.
 
-## Database Name
-`ecommerce`
+This project helps manage customers, product categories, products, orders, order items, payments, and shipping details.
 
-## Database Tables
+It demonstrates how SQL queries can be used to store, manage, retrieve, update, and analyze e-commerce data efficiently.
+
+## 🎯 Project Objectives
+
+- Manage customer information.
+- Store product and category details.
+- Manage customer orders.
+- Track order items and quantities.
+- Maintain payment information.
+- Track shipping and delivery status.
+- Generate sales and revenue reports.
+- Analyze customer purchasing behavior.
+
+## 🗄️ Database Information
+
+**Database Name:** `ecommerce_db`
+
+### Tables Used
 
 This project contains 7 tables:
 
-1. **Customers** – Stores customer information.
-2. **Categories** – Stores product categories.
-3. **Products** – Stores product details, prices, and stock.
-4. **Orders** – Stores customer order information.
-5. **Order_Items** – Stores products included in each order.
-6. **Payments** – Stores payment details and status.
-7. **Shipping** – Stores shipping and delivery information.
+| No. | Table Name | Description |
+|---|---|---|
+| 1 | customers | Stores customer details |
+| 2 | categories | Stores product categories |
+| 3 | products | Stores product information |
+| 4 | orders | Stores customer orders |
+| 5 | order_items | Stores ordered product details |
+| 6 | payments | Stores payment information |
+| 7 | shipping | Stores shipping details |
 
-## SQL Concepts Used
+## 🛠️ Technologies Used
 
-- CREATE DATABASE and CREATE TABLE
-- INSERT, UPDATE, DELETE
-- SELECT and WHERE
-- ORDER BY and GROUP BY
-- HAVING and DISTINCT
-- Primary Key and Foreign Key
-- INNER JOIN, LEFT JOIN, RIGHT JOIN
-- Aggregate Functions: SUM(), AVG(), COUNT(), MAX(), MIN()
-- Subqueries
-- Date Functions: MONTH(), DATEDIFF(), DATE_FORMAT()
-- String Functions: UPPER(), TRIM()
-- Window Functions: RANK(), OVER()
-- CASE Statements
-- ON DELETE CASCADE
+- MySQL
+- SQL
+- MySQL Workbench
 
-## Project Features
+## 📚 SQL Concepts Used
 
-- Manage customer information.
-- Manage product categories and products.
-- Track customer orders.
-- Manage payment status.
-- Track shipping and delivery time.
-- Calculate total revenue.
-- Find top-selling products.
-- Rank customers based on spending.
-- Calculate monthly revenue.
-- Generate sales and customer reports.
+The following SQL concepts are implemented in this project:
 
-## How to Run the Project
+### 1. Database Operations
+- CREATE DATABASE
+- USE DATABASE
+- CREATE TABLE
 
-1. Install MySQL or MySQL Workbench.
-2. Open MySQL Workbench.
-3. Create a new SQL query tab.
-4. Copy the complete project SQL code.
-5. Execute the SQL script.
-6. Use `USE ecommerce;` to select the database.
-7. Run the required queries to view results.
+### 2. Data Manipulation Language (DML)
+- INSERT
+- UPDATE
+- DELETE
 
-## Learning Outcomes
+### 3. Data Query Language (DQL)
+- SELECT
+- WHERE
+- DISTINCT
+- ORDER BY
+- LIMIT
 
-Through this project, I learned how to:
-- Create and manage relational databases.
-- Connect multiple tables using foreign keys.
-- Perform different types of JOIN operations.
-- Use aggregate and string functions.
-- Analyze sales and customer data.
-- Apply subqueries and window functions.
+### 4. Aggregate Functions
+- COUNT()
+- SUM()
+- AVG()
+- MIN()
+- MAX()
 
-## Conclusion
+### 5. Grouping
+- GROUP BY
+- HAVING
 
-This project demonstrates practical knowledge of MySQL and SQL concepts. It helps manage E-Commerce data efficiently and generate useful reports for business analysis.
+### 6. Joins
+- INNER JOIN
+- LEFT JOIN
+- RIGHT JOIN
 
-**Project Name:** E-Commerce Database Management System  
-**Database:** MySQL  
-**Language:** SQL
+### 7. Subqueries
+- Nested SELECT queries
+- NOT IN
+
+### 8. Date Functions
+- CURDATE()
+- DATE_SUB()
+- DATEDIFF()
+- MONTH()
+- DATE_FORMAT()
+
+### 9. String Functions
+- UPPER()
+- TRIM()
+
+### 10. Window Functions
+- RANK()
+- OVER()
+- COUNT() OVER()
+- SUM() OVER()
+
+### 11. Conditional Statements
+- CASE WHEN
+- BETWEEN
+
+## 📊 Project Features
+
+- Customer management
+- Product and category management
+- Order tracking
+- Payment status management
+- Shipping status management
+- Top 5 most purchased products
+- Highest spending customer
+- Monthly revenue analysis
+- Average order value calculation
+- Customer loyalty classification (Gold, Silver, Bronze)
+- Product sales classification (Best Seller, Popular, Regular)
+- Cumulative revenue calculation
+- Running order count
+
+## 🔗 Table Relationships
+
+- One category can have multiple products.
+- One customer can place multiple orders.
+- One order can contain multiple order items.
+- One product can appear in multiple order items.
+- One order can have payment details.
+- One order can have shipping details.
+
+## ▶️ How to Run the Project
