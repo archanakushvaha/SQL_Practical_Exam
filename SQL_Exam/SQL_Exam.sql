@@ -1,7 +1,8 @@
+-- 1. Database Creation
 CREATE DATABASE IF NOT EXISTS ecommerce_db;
-
 USE ecommerce_db;
 
+-- 2. Tables Creation
 CREATE TABLE customers (
     customer_id INT PRIMARY KEY,
     name VARCHAR(50),
@@ -41,8 +42,7 @@ CREATE TABLE order_items (
     product_id INT,
     quantity INT,
     subtotal DECIMAL(10,2),
-    FOREIGN KEY (order_id) REFERENCES orders(order_id)
-        ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
 
@@ -52,8 +52,7 @@ CREATE TABLE payments (
     payment_date DATE,
     payment_method VARCHAR(50),
     payment_status VARCHAR(50),
-    FOREIGN KEY (order_id) REFERENCES orders(order_id)
-        ON DELETE CASCADE
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
 );
 
 CREATE TABLE shipping (
@@ -62,11 +61,10 @@ CREATE TABLE shipping (
     shipping_date DATE,
     delivery_date DATE,
     shipping_status VARCHAR(50),
-    FOREIGN KEY (order_id) REFERENCES orders(order_id)
-        ON DELETE CASCADE
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
 );
 
-
+-- 3. Insert Sample Data
 INSERT INTO customers VALUES
 (1,'Rahul','rahul@gmail.com','9876543210','Surat','2026-01-01'),
 (2,'Priya','priya@gmail.com','9876543211','Ahmedabad','2026-01-02'),
@@ -75,14 +73,12 @@ INSERT INTO customers VALUES
 (5,'Karan','karan@gmail.com','9876543214','Mumbai','2026-01-05'),
 (6,'Jay','jay@gmail.com','9876543215','Gandhinagar','2026-02-06');
 
-
 INSERT INTO categories VALUES
 (1,'Electronics'),
 (2,'Clothing'),
 (3,'Books'),
 (4,'Furniture'),
 (5,'Accessories');
-
 
 INSERT INTO products VALUES
 (1,'Laptop',1,55000,10,'2026-01-06'),
@@ -92,7 +88,6 @@ INSERT INTO products VALUES
 (5,'Headphones',5,1500,25,'2026-01-10'),
 (6,'Smartphone',1,25000,20,'2026-02-11');
 
-
 INSERT INTO orders VALUES
 (101,1,'2026-02-01',55000,'Completed'),
 (102,2,'2026-02-02',800,'Pending'),
@@ -100,7 +95,6 @@ INSERT INTO orders VALUES
 (104,4,'2026-02-04',2500,'Shipped'),
 (105,5,'2026-02-05',1500,'Cancelled'),
 (106,6,'2026-02-06',25000,'Completed');
-
 
 INSERT INTO order_items VALUES
 (1,101,1,1,55000),
@@ -110,7 +104,6 @@ INSERT INTO order_items VALUES
 (5,105,5,1,1500),
 (6,106,6,1,25000);
 
-
 INSERT INTO payments VALUES
 (1,101,'2026-02-01','UPI','Paid'),
 (2,102,'2026-02-02','Cash','Pending'),
@@ -118,7 +111,6 @@ INSERT INTO payments VALUES
 (4,104,'2026-02-04','Debit Card','Paid'),
 (5,105,'2026-02-05','UPI','Failed'),
 (6,106,'2026-02-06','UPI','Paid');
-
 
 INSERT INTO shipping VALUES
 (1,101,'2026-02-02','2026-02-05','Delivered'),
@@ -128,7 +120,9 @@ INSERT INTO shipping VALUES
 (5,105,'2026-02-06','2026-02-09','Cancelled'),
 (6,106,'2026-02-07','2026-02-10','Delivered');
 
+-- 4. Queries & Tasks
 
+-- View all tables
 SELECT * FROM customers;
 SELECT * FROM categories;
 SELECT * FROM products;
@@ -137,51 +131,60 @@ SELECT * FROM order_items;
 SELECT * FROM payments;
 SELECT * FROM shipping;
 
-
+-- Find cancelled orders older than 30 days
 SELECT *
 FROM orders
 WHERE status = 'Cancelled'
 AND order_date < DATE_SUB(CURDATE(), INTERVAL 30 DAY);
 
+-- Find orders placed in the last 1 month
 SELECT *
 FROM orders
 WHERE order_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
 AND order_date <= CURDATE();
 
+-- Get top 5 highest-priced products
 SELECT *
 FROM products
 ORDER BY price DESC
 LIMIT 5;
 
+-- Find customers with more than 3 orders
 SELECT customer_id, COUNT(order_id) AS total_orders
 FROM orders
 GROUP BY customer_id
 HAVING COUNT(order_id) > 3;
 
+-- Orders with Pending status and Paid payment status
 SELECT o.order_id, o.status, p.payment_status
 FROM orders o
 JOIN payments p ON o.order_id = p.order_id
 WHERE o.status = 'Pending'
 AND p.payment_status = 'Paid';
 
+-- Products that are not out of stock
 SELECT *
 FROM products
 WHERE stock_quantity > 0;
 
+-- Customers registered after 2022-12-31 OR purchases above 10000
 SELECT DISTINCT c.*
 FROM customers c
-JOIN orders o ON c.customer_id = o.customer_id
+LEFT JOIN orders o ON c.customer_id = o.customer_id
 WHERE c.registration_date > '2022-12-31'
 OR o.total_amount > 10000;
 
+-- Sort products by price ascending
 SELECT *
 FROM products
 ORDER BY price ASC;
 
+-- Total orders per customer
 SELECT customer_id, COUNT(order_id) AS total_orders
 FROM orders
 GROUP BY customer_id;
 
+-- Total revenue generated per category
 SELECT c.name AS category_name,
        SUM(oi.subtotal) AS total_revenue
 FROM categories c
@@ -191,10 +194,12 @@ JOIN orders o ON oi.order_id = o.order_id
 WHERE o.status != 'Cancelled'
 GROUP BY c.category_id, c.name;
 
+-- Total store revenue
 SELECT SUM(total_amount) AS total_revenue
 FROM orders
 WHERE status != 'Cancelled';
 
+-- Top 5 most purchased products by quantity
 SELECT product_id,
        SUM(quantity) AS total_purchased
 FROM order_items
@@ -202,11 +207,12 @@ GROUP BY product_id
 ORDER BY total_purchased DESC
 LIMIT 5;
 
+-- Average order value
 SELECT AVG(total_amount) AS average_order_value
 FROM orders
 WHERE status != 'Cancelled';
 
-
+-- INNER JOIN: Products and Categories
 SELECT p.product_id,
        p.name AS product_name,
        c.name AS category_name,
@@ -216,6 +222,7 @@ FROM products p
 INNER JOIN categories c
 ON p.category_id = c.category_id;
 
+-- LEFT JOIN: Orders and Customers
 SELECT o.order_id,
        o.order_date,
        o.total_amount,
@@ -226,14 +233,15 @@ FROM orders o
 LEFT JOIN customers c
 ON o.customer_id = c.customer_id;
 
+-- RIGHT JOIN / Unshipped orders check
 SELECT o.order_id,
        o.customer_id,
        o.order_date
-FROM shipping s
-RIGHT JOIN orders o
-ON s.order_id = o.order_id
+FROM orders o
+LEFT JOIN shipping s ON o.order_id = s.order_id
 WHERE s.shipping_id IS NULL;
 
+-- Customers who have never placed an order
 SELECT c.customer_id,
        c.name,
        c.email
@@ -242,6 +250,7 @@ LEFT JOIN orders o
 ON c.customer_id = o.customer_id
 WHERE o.order_id IS NULL;
 
+-- Customers registered after 2022-12-31 with orders
 SELECT o.order_id,
        c.name,
        c.registration_date,
@@ -251,7 +260,7 @@ JOIN orders o
 ON c.customer_id = o.customer_id
 WHERE c.registration_date > '2022-12-31';
 
-
+-- Customer who spent the most
 SELECT customer_id,
        SUM(total_amount) AS total_spent
 FROM orders
@@ -259,26 +268,30 @@ GROUP BY customer_id
 ORDER BY total_spent DESC
 LIMIT 1;
 
+-- Products never ordered
 SELECT *
 FROM products
 WHERE product_id NOT IN (
     SELECT product_id FROM order_items
 );
 
+-- Orders count per month
 SELECT MONTH(order_date) AS month,
        COUNT(order_id) AS total_orders
 FROM orders
 GROUP BY MONTH(order_date);
 
+-- Delivery days calculation
 SELECT shipping_id,
        DATEDIFF(delivery_date, shipping_date) AS delivery_days
 FROM shipping;
 
+-- Format order date
 SELECT order_id,
        DATE_FORMAT(order_date,'%d/%m/%Y') AS formatted_date
 FROM orders;
 
-
+-- String updates
 UPDATE products
 SET name = UPPER(name);
 
@@ -289,6 +302,7 @@ UPDATE customers
 SET email = 'Not Provided'
 WHERE email IS NULL OR email = '';
 
+-- Window Functions: Customer Ranking
 SELECT customer_id,
        SUM(total_amount) AS total_spending,
        RANK() OVER (
@@ -297,6 +311,7 @@ SELECT customer_id,
 FROM orders
 GROUP BY customer_id;
 
+-- Cumulative monthly revenue
 SELECT MONTH(order_date) AS month,
        SUM(total_amount) AS monthly_revenue,
        SUM(SUM(total_amount)) OVER (
@@ -306,6 +321,7 @@ FROM orders
 WHERE status != 'Cancelled'
 GROUP BY MONTH(order_date);
 
+-- Running total of orders
 SELECT order_id,
        order_date,
        COUNT(*) OVER (
@@ -313,6 +329,7 @@ SELECT order_id,
        ) AS running_total
 FROM orders;
 
+-- CASE expression for Product categorization
 SELECT p.product_id,
        p.name,
        SUM(oi.quantity) AS total_units_sold,
@@ -325,6 +342,7 @@ FROM products p
 JOIN order_items oi ON p.product_id = oi.product_id
 GROUP BY p.product_id, p.name;
 
+-- CASE expression for Customer Loyalty Status
 SELECT c.customer_id,
        c.name,
        SUM(o.total_amount) AS total_spending,
